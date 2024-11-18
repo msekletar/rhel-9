@@ -14,6 +14,7 @@
 #include "main-func.h"
 #include "mkdir-label.h"
 #include "mount-util.h"
+#include "mount-setup.h"
 #include "mountpoint-util.h"
 #include "path-util.h"
 #include "rm-rf.h"
@@ -120,6 +121,12 @@ static int user_remove_runtime_path(const char *runtime_path) {
 
         assert(runtime_path);
         assert(path_is_absolute(runtime_path));
+
+        /* SELinux might be preventing us to remove certain files so let's relabel everything under runtime path
+         * before we attempt to remove it. */
+        r = relabel_tree(runtime_path);
+        if (r < 0)
+                log_debug_errno(r, "Failed to recursively relabel files in runtime directory, ignoring: %m");
 
         r = rm_rf(runtime_path, 0);
         if (r < 0)

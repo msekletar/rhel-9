@@ -391,7 +391,7 @@ static int relabel_cb(
         }
 }
 
-static int relabel_tree(const char *path) {
+int relabel_tree(const char *path) {
         int r;
 
         r = recurse_dir_at(AT_FDCWD, path, 0, UINT_MAX, RECURSE_DIR_ENSURE_TYPE|RECURSE_DIR_SAME_MOUNT, relabel_cb, NULL);

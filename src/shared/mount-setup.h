@@ -5,6 +5,7 @@
 
 int mount_setup_early(void);
 int mount_setup(bool loaded_policy, bool leave_propagation);
+int relabel_tree(const char *path);
 
 int mount_cgroup_controllers(void);
 
